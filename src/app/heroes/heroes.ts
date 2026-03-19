@@ -1,27 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
 import { Hero } from '../hero';
-import { HEROES } from '../mock-heroes';
+import { HeroService } from '../hero.service';
+import { MessageService } from '../message.service';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UpperCasePipe, CommonModule } from '@angular/common'; // Добавь CommonModule
-import { HeroDetail } from '../hero-detail/hero-detail';
+import { HeroDetail } from '../hero-detail/hero-detail'; // 1. ПРОВЕРЬ ЭТОТ ИМПОРТ
 
 @Component({
-  selector: 'app-heroes',
-  imports: [FormsModule, UpperCasePipe, CommonModule, HeroDetail], 
-  templateUrl: './heroes.html',
-  styleUrl: './heroes.css',
+    selector: 'app-heroes',
+    imports: [CommonModule, FormsModule, HeroDetail], 
+    templateUrl: './heroes.html',
+    styleUrls: ['./heroes.css'],
 })
+export class Heroes implements OnInit {
+    selectedHero?: Hero;
 
-export class Heroes {
-  heroes = HEROES;
-  
-  // 1. Создаем переменную для хранения выбранного героя. 
-  // Она пустая при загрузке.
-  selectedHero?: Hero;
+    heroes: Hero[] = [];
 
-  // 2. Метод, который сработает при клике. 
-  // Мы принимаем "героя" как аргумент и записываем его в нашу переменную.
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
-  }
+    constructor(
+        private heroService: HeroService,
+        private messageService: MessageService
+    ) {}
+
+    ngOnInit(): void {
+        this.getHeroes();
+    }
+
+    onSelect(hero: Hero): void {
+        this.selectedHero = hero;
+        this.messageService.add(
+            `HeroesComponent: Selected hero id=${hero.id}`
+        );
+    }
+
+    getHeroes(): void {
+        this.heroService
+            .getHeroes()
+            .subscribe((heroes) => (this.heroes = heroes));
+    }
 }
