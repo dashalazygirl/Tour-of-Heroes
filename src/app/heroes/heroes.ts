@@ -1,14 +1,26 @@
 import { Component } from '@angular/core';
 import { Hero } from '../hero';
-import { FormsModule } from '@angular/forms'; // <-- Импорт здесь!
-import { UpperCasePipe } from '@angular/common';
+import { HEROES } from '../mock-heroes';
+import { FormsModule } from '@angular/forms';
+import { UpperCasePipe, CommonModule } from '@angular/common'; // Добавь CommonModule
+
 @Component({
   selector: 'app-heroes',
-  // В новой версии ишем инструменты ПРЯМО ТУТ:
-  imports: [FormsModule,UpperCasePipe], 
+  imports: [FormsModule, UpperCasePipe, CommonModule], 
   templateUrl: './heroes.html',
   styleUrl: './heroes.css',
 })
+
 export class Heroes {
-  hero: Hero = { id: 1, name: 'Windstorm' };
+  heroes = HEROES;
+  
+  // 1. Создаем переменную для хранения выбранного героя. 
+  // Она пустая при загрузке.
+  selectedHero?: Hero;
+
+  // 2. Метод, который сработает при клике. 
+  // Мы принимаем "героя" как аргумент и записываем его в нашу переменную.
+  onSelect(hero: Hero): void {
+    this.selectedHero = hero;
+  }
 }
