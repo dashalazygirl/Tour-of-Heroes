@@ -3,10 +3,11 @@ import { Hero } from '../hero';
 import { HEROES } from '../mock-heroes';
 import { FormsModule } from '@angular/forms';
 import { UpperCasePipe, CommonModule } from '@angular/common'; // Добавь CommonModule
+import { HeroDetail } from '../hero-detail/hero-detail';
 
 @Component({
   selector: 'app-heroes',
-  imports: [FormsModule, UpperCasePipe, CommonModule], 
+  imports: [FormsModule, UpperCasePipe, CommonModule, HeroDetail], 
   templateUrl: './heroes.html',
   styleUrl: './heroes.css',
 })
