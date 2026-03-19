@@ -5,38 +5,25 @@ import { HeroService } from '../hero.service';
 import { MessageService } from '../message.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HeroDetail } from '../hero-detail/hero-detail'; // 1. ПРОВЕРЬ ЭТОТ ИМПОРТ
-
+import { NgFor, NgIf } from '@angular/common'; 
+import { RouterLink } from '@angular/router'; 
 @Component({
     selector: 'app-heroes',
-    imports: [CommonModule, FormsModule, HeroDetail], 
+    imports: [NgFor,CommonModule, FormsModule, NgIf, RouterLink], 
     templateUrl: './heroes.html',
     styleUrls: ['./heroes.css'],
 })
 export class Heroes implements OnInit {
-    selectedHero?: Hero;
+  heroes: Hero[] = [];
 
-    heroes: Hero[] = [];
+  constructor(private heroService: HeroService) {}
 
-    constructor(
-        private heroService: HeroService,
-        private messageService: MessageService
-    ) {}
+  ngOnInit(): void {
+    this.getHeroes();
+  }
 
-    ngOnInit(): void {
-        this.getHeroes();
-    }
-
-    onSelect(hero: Hero): void {
-        this.selectedHero = hero;
-        this.messageService.add(
-            `HeroesComponent: Selected hero id=${hero.id}`
-        );
-    }
-
-    getHeroes(): void {
-        this.heroService
-            .getHeroes()
-            .subscribe((heroes) => (this.heroes = heroes));
-    }
+  getHeroes(): void {
+    this.heroService.getHeroes()
+      .subscribe(heroes => this.heroes = heroes);
+  }
 }
